@@ -1,6 +1,6 @@
 \<comment> \<open>Substitutionless First-Order Logic: A Formal Soundness Proof\<close>
 
-theory Less imports Main begin
+theory Lesser imports Main begin
 
 type_synonym proxy = \<open>unit list\<close>
 
@@ -46,23 +46,17 @@ inductive OK :: \<open>form \<Rightarrow> bool\<close> ("\<turnstile> _" 0) wher
 
 theorem soundness: \<open>\<turnstile> p \<Longrightarrow> semantics e g p\<close>
 proof (induct arbitrary: e rule: OK.induct)
-  case (1 pq) show ?case by (cases pq) (use 1 in auto)
-next
   case 7
-  have *: \<open>length x \<ge> length n \<Longrightarrow> eval e n = eval (e(x := t)) n\<close> for x n e and t :: 'a
-    by (induct n) auto
-  have \<open>no_occur_in x p \<Longrightarrow> semantics e g p = semantics (e(x := t)) g p\<close> for x p e g and t :: 'a
-  proof (induct arbitrary: e)
-    case Pre show ?case by (smt Pre * no_occur_in.simps semantics.simps)
-  next
-    case Uni show ?case by (smt Uni fun_upd_twist fun_upd_upd no_occur_in.simps semantics.simps)
-  qed auto
-  then show ?case by auto
-next
-  case 9 show ?case by (smt fun_upd_twist semantics.simps)
-next
-  case 12 show ?case by (smt fun_upd_same fun_upd_triv fun_upd_twist semantics.simps)
-qed auto
+  have \<open>semantics (e(x := t)) g p = semantics e g p\<close> if \<open>no_occur_in x p\<close> for e x g p and t :: 'a
+  proof -
+    have \<open>eval (e(x := t)) n = eval e n\<close> if \<open>length x \<ge> length n\<close> for e x n and t :: 'a
+      using that Suc_n_not_le_n by (induct n, simp_all, fast)
+    with that show ?thesis
+      by (induct arbitrary: e, simp_all, fast, metis fun_upd_twist fun_upd_upd)
+  qed
+  then show ?case
+    by simp
+qed (auto simp: fun_upd_idem split: form.split, metis fun_upd_twist)
 
 end
 

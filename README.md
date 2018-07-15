@@ -1,8 +1,8 @@
-# Substitutionless First-Order Logic: A Formal Soundness Proof
+# Less - Lesser - Least
 
-## Andreas Halkjær From, John Bruntse Larsen, Anders Schlichtkrull & Jørgen Villadsen
+## Substitutionless First-Order Logic: A Formal Soundness Proof
 
-### Technical University of Denmark
+### Andreas Halkjær From, John Bruntse Larsen, Anders Schlichtkrull & Jørgen Villadsen
 
 For Isabelle Workshop 2018
 
